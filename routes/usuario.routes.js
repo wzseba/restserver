@@ -6,6 +6,7 @@ const {
   deleteUsuarios,
   patchUsuarios,
 } = require("../controllers/usuario.controller");
+const { postUserValidator } = require("../validators/postUsuariosValidator");
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.get("/", getUsuarios);
 
 router.put("/", putUsuarios);
 
-router.post("/", postUsuarios);
+router.post("/", postUserValidator, postUsuarios);
 
 router.delete("/", deleteUsuarios);
 
