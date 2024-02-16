@@ -23,11 +23,19 @@ const postUsuarios = async (req, res = response) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(400).json({ msg: "El correo ya se encuentra en la BD" });
   }
 };
 
-const putUsuarios = (req, res = response) => {
-  res.json({ msg: "hola" });
+const putUsuarios = async (req, res = response) => {
+  const { id } = req.params;
+  const { _id, password, google, correo, ...resto } = req.body;
+
+  if (password) resto.password = encryptPassword(password);
+
+  const userPut = await Usuario.findByIdAndUpdate(id, resto, { new: true });
+
+  res.json(userPut);
 };
 
 const deleteUsuarios = (req, res = response) => {
