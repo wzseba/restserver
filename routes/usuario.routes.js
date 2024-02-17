@@ -21,6 +21,4 @@ router.post("/", postUserValidator, postUsuarios);
 
 router.delete("/:id", deleteUsuarios);
 
-router.patch("/", patchUsuarios);
-
 module.exports = router;
