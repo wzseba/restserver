@@ -9,6 +9,7 @@ const {
 const {
   postUserValidator,
   putUserValidator,
+  deleteUserValidator,
 } = require("../validators/usuariosValidator");
 
 const router = Router();
@@ -19,6 +20,6 @@ router.put("/:id", putUserValidator, putUsuarios);
 
 router.post("/", postUserValidator, postUsuarios);
 
-router.delete("/:id", deleteUsuarios);
+router.delete("/:id", deleteUserValidator, deleteUsuarios);
 
 module.exports = router;
