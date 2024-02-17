@@ -26,7 +26,14 @@ const putUserValidator = [
   validationFieldResults,
 ];
 
+const deleteUserValidator = [
+  check("id", "El id no es valido").isMongoId(),
+  check("id").custom(existeUsuarioPorId),
+  validationFieldResults,
+];
+
 module.exports = {
   postUserValidator,
   putUserValidator,
+  deleteUserValidator,
 };
