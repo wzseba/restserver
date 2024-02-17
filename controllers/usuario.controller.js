@@ -3,8 +3,21 @@ const { response } = require("express");
 const Usuario = require("../models/usuario");
 const { encryptPassword } = require("../helpers/hashPass");
 
-const getUsuarios = (req, res = response) => {
-  res.json({ msg: "hola" });
+const getUsuarios = async (req, res = response) => {
+  try {
+    const { limite = 5, desde = 0 } = req.query;
+
+    const q = { estado: true };
+
+    const [total, usuarios] = await Promise.all([
+      Usuario.countDocuments(q),
+      Usuario.find(q).skip(parseInt(desde)).limit(parseInt(limite)),
+    ]);
+    res.json({ total, usuarios });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
 };
 
 const postUsuarios = async (req, res = response) => {
@@ -28,18 +41,32 @@ const postUsuarios = async (req, res = response) => {
 };
 
 const putUsuarios = async (req, res = response) => {
-  const { id } = req.params;
-  const { _id, password, google, correo, ...resto } = req.body;
+  try {
+    const { id } = req.params;
+    const { _id, password, google, correo, ...resto } = req.body;
 
-  if (password) resto.password = encryptPassword(password);
+    if (password) resto.password = encryptPassword(password);
 
-  const userPut = await Usuario.findByIdAndUpdate(id, resto, { new: true });
+    const userPut = await Usuario.findByIdAndUpdate(id, resto, { new: true });
 
-  res.json(userPut);
+    res.json(userPut);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
 };
 
-const deleteUsuarios = (req, res = response) => {
-  res.json({ msg: "hola" });
+const deleteUsuarios = async (req, res = response) => {
+  try {
+    const { id } = req.params;
+
+    userDelete = await Usuario.findByIdAndUpdate(id, { estado: false });
+
+    res.json(userDelete);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
 };
 
 const patchUsuarios = (req, res = response) => {
