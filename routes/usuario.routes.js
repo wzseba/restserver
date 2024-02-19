@@ -11,6 +11,7 @@ const {
   putUserValidator,
   deleteUserValidator,
 } = require("../validators/usuariosValidator");
+const { validJTW } = require("../middlewares/jwtVerifications");
 
 const router = Router();
 
@@ -20,6 +21,6 @@ router.put("/:id", putUserValidator, putUsuarios);
 
 router.post("/", postUserValidator, postUsuarios);
 
-router.delete("/:id", deleteUserValidator, deleteUsuarios);
+router.delete("/:id", validJTW, deleteUserValidator, deleteUsuarios);
 
 module.exports = router;
