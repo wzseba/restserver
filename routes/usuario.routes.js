@@ -4,7 +4,7 @@ const {
   putUsuarios,
   postUsuarios,
   deleteUsuarios,
-  patchUsuarios,
+  // patchUsuarios,
 } = require("../controllers/usuario.controller");
 const {
   postUserValidator,
