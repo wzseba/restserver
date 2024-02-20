@@ -1,7 +1,7 @@
-const { response } = require("express");
+const { response } = require('express');
 
-const Usuario = require("../models/usuario");
-const { encryptPassword } = require("../helpers/hashPass");
+const Usuario = require('../models/usuario');
+const { encryptPassword } = require('../helpers/hashPass');
 
 const getUsuarios = async (req, res = response) => {
   try {
@@ -25,10 +25,10 @@ const postUsuarios = async (req, res = response) => {
     const { nombre, correo, password, rol } = req.body;
     const user = new Usuario({ nombre, correo, password, rol });
 
-    //Encriptar password
+    // Encriptar password
     user.password = encryptPassword(password);
 
-    //Guardar en DB
+    // Guardar en DB
     await user.save();
 
     res.json({
@@ -36,7 +36,7 @@ const postUsuarios = async (req, res = response) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ msg: "El correo ya se encuentra en la BD" });
+    return res.status(400).json({ msg: 'El correo ya se encuentra en la BD' });
   }
 };
 
@@ -60,7 +60,7 @@ const deleteUsuarios = async (req, res = response) => {
   try {
     const { id } = req.params;
 
-    userDelete = await Usuario.findByIdAndUpdate(id, { estado: false });
+    const userDelete = await Usuario.findByIdAndUpdate(id, { estado: false });
 
     res.json(userDelete);
   } catch (error) {
@@ -70,7 +70,7 @@ const deleteUsuarios = async (req, res = response) => {
 };
 
 const patchUsuarios = (req, res = response) => {
-  res.json({ msg: "hola" });
+  res.json({ msg: 'hola' });
 };
 
 module.exports = {

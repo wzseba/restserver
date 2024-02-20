@@ -1,17 +1,17 @@
-const Role = require("../models/role");
-const Usuario = require("../models/usuario");
+const Role = require('../models/role');
+const Usuario = require('../models/usuario');
 
-const esRoleValido = async (rol = "") => {
+const esRoleValido = async (rol = '') => {
   const existeRol = Role.findOne(rol);
   if (!existeRol) {
-    throw new Error("El rol no esta registrado en la DB");
+    throw new Error('El rol no esta registrado en la DB');
   }
 };
 
-const existeUsuarioPorId = async (id) => {
+const existeUsuarioPorId = async id => {
   const existeUsuario = await Usuario.findById(id);
   if (!existeUsuario) {
-    throw new Error("El usuario con ese id no existe");
+    throw new Error('El usuario con ese id no existe');
   }
 };
 
