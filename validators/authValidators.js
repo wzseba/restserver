@@ -7,6 +7,12 @@ const postAuthValidator = [
   validationFieldResults,
 ];
 
+const authGoogleSignIn = [
+  check('idToken', 'Token de google es necesario').not().isEmpty(),
+  validationFieldResults,
+];
+
 module.exports = {
   postAuthValidator,
+  authGoogleSignIn,
 };
