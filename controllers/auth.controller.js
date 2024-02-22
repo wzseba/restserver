@@ -34,6 +34,20 @@ const loginUsuarios = async (req, res = response) => {
   }
 };
 
+const googleSignIn = async (req, res = response) => {
+  try {
+    const { idToken } = req.body;
+
+    res.json({
+      msg: 'todo bien',
+      idToken,
+    });
+  } catch (error) {
+    console.warn(error);
+  }
+};
+
 module.exports = {
   loginUsuarios,
+  googleSignIn,
 };
