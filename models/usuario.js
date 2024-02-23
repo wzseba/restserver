@@ -13,6 +13,7 @@ const usuarioSchema = new Schema({
     type: String,
     required: [true, 'El rol es obligatorio'],
     enum: ['ADMIN_ROLE', 'USER_ROLE'],
+    default: 'USER_ROLE',
   },
   estado: { type: Boolean, default: true },
   google: { type: Boolean, default: false },
