@@ -1,4 +1,6 @@
 const { Router } = require('express');
+const { createCategory } = require('../controllers/categoria.controller');
+const { validJTW } = require('../middlewares/jwtVerifications');
 
 const router = Router();
 
@@ -11,9 +13,7 @@ router.get('/:id', (req, res) => {
   res.json({ msg: 'get' });
 });
 // Crear categoria - admin
-router.post('/', (req, res) => {
-  res.json({ msg: 'post' });
-});
+router.post('/', validJTW, createCategory);
 // Actualizar categoria - admin
 router.put('/:id', (req, res) => {
   res.json({ msg: 'put' });
