@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const productoSchema = new Schema({
   nombre: {
     type: String,
-    // uppercase: true,
+    uppercase: true,
     required: [true, 'El nombre es obligatorio'],
     unique: true,
   },
