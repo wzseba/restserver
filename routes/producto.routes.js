@@ -5,9 +5,12 @@ const {
   getProduct,
   putProduct,
   deleteProduct,
-} = require('../controllers/categoria.controller');
+} = require('../controllers/producto.controller');
 const { validJTW } = require('../middlewares/jwtVerifications');
-const { validatorIdProduct } = require('../validators/productoValidator');
+const {
+  validatorIdProduct,
+  validatorPostProducto,
+} = require('../validators/productoValidator');
 const { adminRole } = require('../middlewares/isAdminRole');
 
 const router = Router();
@@ -19,7 +22,7 @@ router.get('/', getProducts);
 router.get('/:id', validatorIdProduct, getProduct);
 
 // Crear producto - admin
-router.post('/', validJTW, adminRole, postProduct);
+router.post('/', validJTW, adminRole, validatorPostProducto, postProduct);
 
 // Actualizar producto - admin
 router.put('/:id', validJTW, adminRole, validatorIdProduct, putProduct);
