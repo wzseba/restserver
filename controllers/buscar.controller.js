@@ -14,7 +14,14 @@ const buscarUsuario = async (termino = '', res = response) => {
       results: usuario ? [usuario] : [],
     });
   }
-  res.json({ msg: 'mongo id no es correcto' });
+  const regex = new RegExp(termino, 'i');
+
+  const results = await Usuario.find({
+    $or: [{ nombre: regex }, { correo: regex }],
+    $and: [{ estado: true }],
+  });
+
+  res.json({ results });
 };
 
 const buscarDB = (req, res = response) => {
@@ -39,8 +46,6 @@ const buscarDB = (req, res = response) => {
     default:
       res.status(500).json({ msg: 'Problema de server' });
   }
-
-  // res.json({ coleccion, termino });
 };
 
 module.exports = {
