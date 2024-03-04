@@ -1,30 +1,45 @@
 const { response } = require('express');
-const { isValidObjectId } = require('mongoose');
-const { Usuario } = require('../models');
+const { ObjectId } = require('mongoose').Types;
+const { Usuario, Producto, Categoria } = require('../models');
 
 const coleccionespermitidas = ['usuario', 'categoria', 'role', 'producto'];
 
-const buscarUsuario = async (termino = '', res = response) => {
-  const esMongoId = isValidObjectId(termino);
+const busquedaFlexible = async (model, coleccion, termino = '') => {
+  const esMongoId = ObjectId.isValid(termino);
 
   if (esMongoId) {
-    const usuario = await Usuario.findById(termino);
+    const results = await model.findById(termino);
 
-    return res.json({
-      results: usuario ? [usuario] : [],
-    });
+    return { results };
   }
   const regex = new RegExp(termino, 'i');
 
-  const results = await Usuario.find({
-    $or: [{ nombre: regex }, { correo: regex }],
-    $and: [{ estado: true }],
-  });
+  const query = {
+    producto: {
+      $and: [{ nombre: regex }, { estado: true }],
+    },
+    usuario: {
+      $or: [{ nombre: regex }, { correo: regex }],
+      $and: [{ estado: true }],
+    },
+    categoria: {
+      $and: [{ nombre: regex }, { estado: true }],
+    },
+  };
 
-  res.json({ results });
+  const results = await model.find(query[coleccion]);
+  const populatePromise = [
+    await model.populate(results, { path: 'categoria', select: 'nombre' }),
+    await model.populate(results, { path: 'producto', select: 'nombre' }),
+    await model.populate(results, { path: 'usuario', select: 'nombre' }),
+  ];
+
+  await Promise.all(populatePromise);
+
+  return { results };
 };
 
-const buscarDB = (req, res = response) => {
+const buscarDB = async (req, res = response) => {
   const { coleccion, termino } = req.params;
 
   if (!coleccionespermitidas.includes(coleccion)) {
@@ -33,19 +48,14 @@ const buscarDB = (req, res = response) => {
     });
   }
 
-  switch (coleccion) {
-    case 'usuario':
-      buscarUsuario(termino, res);
-      break;
-    case 'categoria':
-      break;
-    case 'producto':
-      break;
-    case 'role':
-      break;
-    default:
-      res.status(500).json({ msg: 'Problema de server' });
-  }
+  // Objeto literal en donde la notación[coleccion] accede a propiedades para llamar a cada funcion
+  const resultado = await {
+    usuario: busquedaFlexible(Usuario, coleccion, termino),
+    categoria: busquedaFlexible(Categoria, coleccion, termino),
+    producto: busquedaFlexible(Producto, coleccion, termino),
+  }[coleccion];
+
+  res.json(resultado);
 };
 
 module.exports = {
