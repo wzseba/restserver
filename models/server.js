@@ -11,6 +11,7 @@ class Server {
     this.categoriaPath = '/api/categoria';
     this.productoPath = '/api/producto';
     this.usuariosPath = '/api/usuarios';
+    this.uploadPath = '/api/upload';
 
     // conexion a DB
     this.conectionDB();
@@ -43,6 +44,7 @@ class Server {
     this.app.use(this.categoriaPath, require('../routes/categoria.routes'));
     this.app.use(this.productoPath, require('../routes/producto.routes'));
     this.app.use(this.usuariosPath, require('../routes/usuario.routes'));
+    this.app.use(this.uploadPath, require('../routes/upload.routes'));
   }
 
   listen() {
