@@ -1,5 +1,6 @@
 const { Categoria, Usuario, Producto } = require('../models');
 const Role = require('../models/role');
+const { default: mongoose } = require('mongoose');
 
 const esRoleValido = async (rol = '') => {
   const existeRol = Role.findOne(rol);
@@ -29,6 +30,15 @@ const existeProductoPorId = async id => {
   }
 };
 
+const existeColeccion = async (coleccion = '') => {
+  const infoDB = await mongoose.connection.db.listCollections().toArray();
+  const coleccionPermitida = infoDB.map(c => c.name).includes(coleccion);
+
+  if (!coleccionPermitida) {
+    throw new Error(`La coleccion ${coleccion} no es valida`);
+  }
+};
+
 // const emailExiste = async (email) => {
 //   const existeEmail = await Usuario.findOne({ email });
 //   if (existeEmail) {
@@ -41,5 +51,6 @@ module.exports = {
   existeUsuarioPorId,
   existeCategoriaPorId,
   existeProductoPorId,
+  existeColeccion,
   // emailExiste,
 };
