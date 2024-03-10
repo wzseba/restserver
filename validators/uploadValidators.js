@@ -1,14 +1,14 @@
 const { param } = require('express-validator');
-const { existeUsuarioPorId, existeColeccion } = require('./dbValidators');
+const { /* existeUsuarioPorId,*/ existeColeccion } = require('./dbValidators');
 const { validationFieldResults } = require('./validatorField');
 
-const putUserImage = [
-  param('id', 'El id es obligatorio').isMongoId(),
-  param('id').custom(existeUsuarioPorId),
-  param('coleccion').custom(existeColeccion),
+const putUserOrProductImage = [
+  param('coleccion').custom((coleccion, { req }) =>
+    existeColeccion(coleccion, req.params.id)
+  ),
   validationFieldResults,
 ];
 
 module.exports = {
-  putUserImage,
+  putUserOrProductImage,
 };
