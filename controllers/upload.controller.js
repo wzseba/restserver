@@ -3,13 +3,6 @@ const { subirArchivo } = require('../helpers');
 
 const cargarArchivo = async (req, res = response) => {
   try {
-    if (
-      !req.files ||
-      Object.keys(req.files).length === 0 ||
-      !req.files.archivo
-    ) {
-      return res.status(400).json({ msg: 'No hay archivo para cargar' });
-    }
     // Subir archivo con extension definida
     const nombre = await subirArchivo(req.files, ['.docx', '.md'], 'imagenes');
 
@@ -25,10 +18,9 @@ const cargarArchivo = async (req, res = response) => {
   }
 };
 
-const actualizarImagen = (req, res = response) => {
-  const { coleccion, id } = req.params;
-  console.log(coleccion, id);
-  res.json({ msg: 'Imagen actualizada' });
+const actualizarImagen = async (req, res = response) => {
+  const nombre = await subirArchivo(req.files);
+  res.json({ msg: 'Imagen actualizada', nombre });
 };
 
 module.exports = {
