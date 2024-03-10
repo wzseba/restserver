@@ -1,10 +1,10 @@
 const { param } = require('express-validator');
-const { /* existeUsuarioPorId,*/ existeColeccion } = require('./dbValidators');
+const { existeColeccion } = require('./dbValidators');
 const { validationFieldResults } = require('./validatorField');
 
 const putUserOrProductImage = [
-  param('coleccion').custom((coleccion, { req }) =>
-    existeColeccion(coleccion, req.params.id)
+  param('coleccion').custom((value, { req }) =>
+    existeColeccion(value, req.params.id)
   ),
   validationFieldResults,
 ];
