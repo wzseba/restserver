@@ -1,6 +1,4 @@
-const { Categoria, Usuario, Producto } = require('../models');
-const Role = require('../models/role');
-const { default: mongoose } = require('mongoose');
+const { Categoria, Usuario, Producto, Role } = require('../models');
 
 const esRoleValido = async (rol = '') => {
   const existeRol = Role.findOne(rol);
@@ -30,12 +28,19 @@ const existeProductoPorId = async id => {
   }
 };
 
-const existeColeccion = async (coleccion = '') => {
-  const infoDB = await mongoose.connection.db.listCollections().toArray();
-  const coleccionPermitida = infoDB.map(c => c.name).includes(coleccion);
+const existeColeccion = (coleccion, id) => {
+  // Listar colecciones
+  // const infoDB = await mongoose.connection.db.listCollections().toArray();
 
-  if (!coleccionPermitida) {
-    throw new Error(`La coleccion ${coleccion} no es valida`);
+  const coleccionesPermitidas = ['usuarios', 'productos'];
+  if (!coleccionesPermitidas.includes(coleccion)) {
+    throw new Error(`La colección ${coleccion} no es válida`);
+  }
+
+  if (coleccion === 'productos') {
+    return existeProductoPorId(id);
+  } else if (coleccion === 'usuarios') {
+    return existeUsuarioPorId(id);
   }
 };
 
