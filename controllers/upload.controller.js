@@ -19,7 +19,9 @@ const cargarArchivo = async (req, res = response) => {
 };
 
 const actualizarImagen = async (req, res = response) => {
-  const nombre = await subirArchivo(req.files);
+  const carpeta = req.params.coleccion;
+
+  const nombre = await subirArchivo(req.files, undefined, carpeta);
   res.json({ msg: 'Imagen actualizada', nombre });
 };
 
