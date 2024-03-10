@@ -3,11 +3,17 @@ const {
   cargarArchivo,
   actualizarImagen,
 } = require('../controllers/upload.controller');
-const { putUserImage } = require('../validators/uploadValidators');
+const { putUserOrProductImage } = require('../validators/uploadValidators');
+const { correctFile } = require('../middlewares/isCorrectFile');
 
 const router = Router();
 
-router.post('/', cargarArchivo);
-router.put('/:coleccion/:id', putUserImage, actualizarImagen);
+router.post('/', correctFile, cargarArchivo);
+router.put(
+  '/:coleccion/:id',
+  correctFile,
+  putUserOrProductImage,
+  actualizarImagen
+);
 
 module.exports = router;
