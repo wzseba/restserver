@@ -39,7 +39,7 @@ const productoSchema = new Schema({
 });
 
 productoSchema.methods.toJSON = function () {
-  const { __v, estado, ...data } = this.toObject();
+  const { __v, ...data } = this.toObject();
   return data;
 };
 
