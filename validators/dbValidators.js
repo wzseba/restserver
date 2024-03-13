@@ -26,21 +26,22 @@ const existeProductoPorId = async id => {
   if (!existeProducto) {
     throw new Error('El producto con ese id no existe');
   }
+  return existeProducto;
 };
 
-const existeColeccion = (coleccion, id) => {
+const existeColeccion = async (coleccion, req) => {
   // Listar colecciones
   // const infoDB = await mongoose.connection.db.listCollections().toArray();
-
+  const { id } = req.params;
   const coleccionesPermitidas = ['usuarios', 'productos'];
   if (!coleccionesPermitidas.includes(coleccion)) {
     throw new Error(`La colección ${coleccion} no es válida`);
   }
-
+  // req.resultado asigno el resultado de la funcion
   if (coleccion === 'productos') {
-    return existeProductoPorId(id);
+    req.resultado = await existeProductoPorId(id);
   } else if (coleccion === 'usuarios') {
-    return existeUsuarioPorId(id);
+    req.resultado = await existeUsuarioPorId(id);
   }
 };
 
