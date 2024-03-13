@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const { response } = require('express');
 const { subirArchivo } = require('../helpers');
 
@@ -20,8 +22,17 @@ const cargarArchivo = async (req, res = response) => {
 
 const actualizarImagen = async (req, res = response) => {
   const carpeta = req.params.coleccion;
+  const modelo = req.resultado;
+
+  if (modelo.img) {
+    const pathImagen = path.join(__dirname, '../uploads/', carpeta, modelo.img);
+    if (fs.existsSync(pathImagen)) fs.unlinkSync(pathImagen);
+  }
 
   const nombre = await subirArchivo(req.files, undefined, carpeta);
+  modelo.img = nombre;
+  await modelo.save();
+
   res.json({ msg: 'Imagen actualizada', nombre });
 };
 
