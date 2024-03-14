@@ -2,8 +2,9 @@ const { Router } = require('express');
 const {
   cargarArchivo,
   actualizarImagen,
+  mostrarImagen,
 } = require('../controllers/upload.controller');
-const { putUserOrProductImage } = require('../validators/uploadValidators');
+const { userOrProductImage } = require('../validators/uploadValidators');
 const { correctFile } = require('../middlewares/isCorrectFile');
 
 const router = Router();
@@ -12,8 +13,9 @@ router.post('/', correctFile, cargarArchivo);
 router.put(
   '/:coleccion/:id',
   correctFile,
-  putUserOrProductImage,
+  userOrProductImage,
   actualizarImagen
 );
+router.get('/:coleccion/:id', userOrProductImage, mostrarImagen);
 
 module.exports = router;
