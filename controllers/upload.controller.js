@@ -36,7 +36,21 @@ const actualizarImagen = async (req, res = response) => {
   res.json({ msg: 'Imagen actualizada', nombre });
 };
 
+const mostrarImagen = (req, res = response) => {
+  const carpeta = req.params.coleccion;
+  const modelo = req.resultado;
+
+  if (modelo.img) {
+    const pathImagen = path.join(__dirname, '../uploads/', carpeta, modelo.img);
+    if (fs.existsSync(pathImagen)) return res.sendFile(pathImagen);
+  }
+
+  const pathImagenNotFound = path.join(__dirname, '../assets/no-image.jpg');
+  res.sendFile(pathImagenNotFound);
+};
+
 module.exports = {
   cargarArchivo,
   actualizarImagen,
+  mostrarImagen,
 };
