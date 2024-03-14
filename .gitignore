@@ -47,7 +47,7 @@ node_modules/
 jspm_packages/
 
 # Carpeta imagenes
-uploads/**.*
+uploads/*
 !uploads/README.md
 
 # Snowpack dependency directory (https://snowpack.dev/)
