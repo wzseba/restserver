@@ -21,5 +21,10 @@ module.exports = {
   },
   rules: {
     'spaced-comment': ['error', 'always'],
+    camelcase: [
+      'error',
+      { ignoreGlobals: true },
+      { ignoreDestructuring: true },
+    ],
   },
 };
