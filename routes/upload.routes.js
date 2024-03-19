@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const {
   cargarArchivo,
-  actualizarImagen,
   mostrarImagen,
+  actualizarImagenCloudinary,
 } = require('../controllers/upload.controller');
 const { userOrProductImage } = require('../validators/uploadValidators');
 const { correctFile } = require('../middlewares/isCorrectFile');
@@ -14,7 +14,7 @@ router.put(
   '/:coleccion/:id',
   correctFile,
   userOrProductImage,
-  actualizarImagen
+  actualizarImagenCloudinary
 );
 router.get('/:coleccion/:id', userOrProductImage, mostrarImagen);
 
