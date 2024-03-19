@@ -2,6 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { response } = require('express');
 const { subirArchivo } = require('../helpers');
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(process.env.CLOUDINARY_URL);
 
 const cargarArchivo = async (req, res = response) => {
   try {
@@ -36,6 +38,30 @@ const actualizarImagen = async (req, res = response) => {
   res.json({ msg: 'Imagen actualizada', nombre });
 };
 
+const actualizarImagenCloudinary = async (req, res = response) => {
+  try {
+    const modelo = req.resultado;
+    const { tempFilePath } = req.files.archivo;
+
+    if (modelo.img) {
+      const nombreArray = modelo.img.split('/');
+      const nombre = nombreArray[nombreArray.length - 1];
+      const [imgID] = nombre.split('.');
+
+      await cloudinary.uploader.destroy(imgID);
+    }
+
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath);
+
+    modelo.img = secure_url;
+    await modelo.save();
+
+    res.json({ modelo });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const mostrarImagen = (req, res = response) => {
   const carpeta = req.params.coleccion;
   const modelo = req.resultado;
@@ -52,5 +78,6 @@ const mostrarImagen = (req, res = response) => {
 module.exports = {
   cargarArchivo,
   actualizarImagen,
+  actualizarImagenCloudinary,
   mostrarImagen,
 };
