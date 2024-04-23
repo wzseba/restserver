@@ -11,57 +11,56 @@
     />
     <title>Google Sign-in</title>
   </head>
-  <body class="container">
-    <div class="row mt-5">
-      <div class="col-sm-6">
-        <h1>Google Sign-in</h1>
-        <hr />
-        <div
-          id="g_id_onload"
-          data-client_id="400602848536-pveqqb76p0tm89hj64c4mjkjhrv6u895.apps.googleusercontent.com"
-          data-auto_prompt="false"
-          data-callback="handleCredentialResponse"
-        ></div>
-        <div
-          class="g_id_signin btn btn-primary"
-          data-type="standard"
-          data-size="large"
-          data-text="sign_in_with"
-          data-logo_alignment="left"
-        ></div>
+  <body>
+    <div class="container">
+      <div class="row">
+        <!-- Columna izquierda para el login de Google -->
+        <div class="col-sm-6">
+          <h1>Google Sign-in</h1>
+          <hr />
+          <div
+            id="g_id_onload"
+            data-client_id="400602848536-pveqqb76p0tm89hj64c4mjkjhrv6u895.apps.googleusercontent.com"
+            data-auto_prompt="false"
+            data-callback="handleCredentialResponse"
+          ></div>
+          <div
+            class="g_id_signin"
+            data-type="standard"
+            data-size="large"
+            data-theme="outline"
+            data-text="sign_in_with"
+            data-shape="rectangular"
+            data-logo_alignment="left"
+          ></div>
+          <br />
+          <button id="googleSignout" class="btn btn-secondary">Singout</button>
+        </div>
+
+        <!-- Columna derecha para el formulario manual -->
+        <div class="col-sm-6">
+          <h1>Login manual</h1>
+          <hr />
+          <form class="d-grid">
+            <input
+              type="text"
+              name="correo"
+              class="form-control mb-2"
+              placeholder="Correo"
+            />
+            <input
+              type="text"
+              name="password"
+              class="form-control mb-2"
+              placeholder="Password"
+            />
+
+            <button type="submit" class="btn btn-primary">Ingresar</button>
+          </form>
+        </div>
       </div>
     </div>
-    <br />
-    <button id="googleSignout" class="btn btn-info">Signout</button>
     <script src="https://accounts.google.com/gsi/client" async></script>
-    <script>
-      function handleCredentialResponse(response) {
-        const body = { idToken: response.credential };
-
-        fetch('http://localhost:8080/api/auth/google', {
-          method: 'POST',
-          headers: {
-            key: 'Cross-Origin-Opener-Policy',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        })
-          .then(res => res.json())
-          .then(res => {
-            console.log('Respuesta fetch ', res);
-            localStorage.setItem('email', res.usuario.correo);
-          })
-          .catch(console.warn);
-      }
-
-      const button = document.getElementById('googleSignout');
-      button.onclick = () => {
-        google.accounts.id.disableAutoSelect();
-        google.accounts.id.revoke(localStorage.getItem('email'), done => {
-          localStorage.clear();
-          location.reload();
-        });
-      };
-    </script>
+    <script src="./js/auth.js"></script>
   </body>
 </html>
