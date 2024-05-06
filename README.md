@@ -1,6 +1,6 @@
 # Rest-server-crud
 
-Sever desarrollado en node, aplicando validators y roles
+Sever desarrollado en node, aplicando validators, roles, sockets
 
 ## Running server
 
