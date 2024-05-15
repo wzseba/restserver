@@ -1,7 +1,6 @@
-// const socket = io();
+/* eslint-disable no-undef */
 
 let usuario = null;
-let socket = null;
 
 // Ver window.location.hostname.includes('localhost')
 const url = 'http://localhost:8080/api/auth/';
@@ -24,6 +23,20 @@ const validarToken = async () => {
   // Renovar token
   localStorage.setItem('token', tokenDB);
   usuario = usuarioDB;
+
+  // Asigno el nombre del usuario
+  document.title = usuario.nombre;
+
+  await conectarSocket();
+};
+
+const conectarSocket = async () => {
+  // eslint-disable-next-line no-unused-vars
+  const socket = io({
+    extraHeaders: {
+      'x-token': localStorage.getItem('token'),
+    },
+  });
 };
 
 const main = async () => {
