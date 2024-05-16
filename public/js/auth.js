@@ -31,6 +31,7 @@ miFormulario.addEventListener('submit', e => {
         console.log(msg);
       }
       localStorage.setItem('token', token);
+      window.location = 'chat.html';
     })
     .catch(console.warn);
 });
@@ -53,6 +54,7 @@ function handleCredentialResponse(response) {
         console.log(msg);
       }
       localStorage.setItem('token', token);
+      window.location = 'chat.html';
     })
     .catch(console.warn);
 }
