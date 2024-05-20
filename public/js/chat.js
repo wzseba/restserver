@@ -2,6 +2,13 @@
 
 let usuario = null;
 
+//Referencias HTML
+const txtUid = document.querySelector('#txtUid');
+const txtMensaje = document.querySelector('#txtMensaje');
+const ulUsuarios = document.querySelector('#ulUsuarios');
+const ulMensajes = document.querySelector('#ulMensajes');
+const btnSalir = document.querySelector('#btnSalir');
+
 // Ver window.location.hostname.includes('localhost')
 const url = 'http://localhost:8080/api/auth/';
 
@@ -37,6 +44,16 @@ const conectarSocket = async () => {
       'x-token': localStorage.getItem('token'),
     },
   });
+
+  socket.on('connect', () => {
+    console.log('online');
+  });
+  socket.on('disconnect', () => {
+    console.log('offline');
+  });
+  socket.on('recibir-mensajes', () => {});
+  socket.on('usuarios-activos', () => {});
+  socket.on('mensaje-privado', () => {});
 };
 
 const main = async () => {
