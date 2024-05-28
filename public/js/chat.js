@@ -1,3 +1,9 @@
+// console.log(payload);
+// btnSalir.onclick = () => {
+//   socket.disconnect();
+//   localStorage.clear();
+//   window.location = 'index.html';
+// };
 /* eslint-disable no-undef */
 
 let usuario = null;
@@ -52,8 +58,23 @@ const conectarSocket = async () => {
     console.log('offline');
   });
   socket.on('recibir-mensajes', () => {});
-  socket.on('usuarios-activos', () => {});
+  socket.on('usuarios-activos', mostrarUsuarios);
   socket.on('mensaje-privado', () => {});
+};
+
+const mostrarUsuarios = (usuarios = []) => {
+  let usersHtml = '';
+
+  usuarios.forEach(({ nombre, uid }) => {
+    usersHtml += `
+    <li>
+    <p>
+    <h5 class="text-success">${nombre}</h5>
+    <span class="fs-6 text-muted">${uid}</span>
+    </p>
+    </li>`;
+  });
+  ulUsuarios.innerHTML = usersHtml;
 };
 
 const main = async () => {
