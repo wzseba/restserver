@@ -1,14 +1,6 @@
-// console.log(payload);
-// btnSalir.onclick = () => {
-//   socket.disconnect();
-//   localStorage.clear();
-//   window.location = 'index.html';
-// };
 /* eslint-disable no-undef */
-
 let usuario = null;
-
-//Referencias HTML
+// Referencias HTML
 const txtUid = document.querySelector('#txtUid');
 const txtMensaje = document.querySelector('#txtMensaje');
 const ulUsuarios = document.querySelector('#ulUsuarios');
@@ -44,7 +36,7 @@ const validarToken = async () => {
 };
 
 const conectarSocket = async () => {
-  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars, no-undef
   const socket = io({
     extraHeaders: {
       'x-token': localStorage.getItem('token'),
@@ -57,9 +49,25 @@ const conectarSocket = async () => {
   socket.on('disconnect', () => {
     console.log('offline');
   });
-  socket.on('recibir-mensajes', () => {});
+  socket.on('recibir-mensajes', mostrarMensajes);
   socket.on('usuarios-activos', mostrarUsuarios);
   socket.on('mensaje-privado', () => {});
+
+  // Solo registrar el evento `keyup` cuando `socket` esté listo
+  txtMensaje.addEventListener('keyup', ({ keyCode }) => {
+    const mensaje = txtMensaje.value;
+    const uid = txtUid.value;
+
+    if (keyCode !== 13) {
+      return;
+    }
+    if (mensaje.length === 0) {
+      return;
+    }
+
+    socket.emit('enviar-mensaje', { mensaje, uid });
+    txtMensaje.value = ''; // Limpiar el campo de texto después de enviar el mensaje
+  });
 };
 
 const mostrarUsuarios = (usuarios = []) => {
@@ -75,6 +83,21 @@ const mostrarUsuarios = (usuarios = []) => {
     </li>`;
   });
   ulUsuarios.innerHTML = usersHtml;
+};
+
+const mostrarMensajes = mensajes => {
+  let mensajeHtml = '';
+
+  mensajes.forEach(({ nombre, mensaje }) => {
+    mensajeHtml += `
+    <li>
+    <p>
+    <span class="text-primary">${nombre} :</span>
+    <span>${mensaje}</span>
+    </p>
+    </li>`;
+  });
+  ulMensajes.innerHTML = mensajeHtml;
 };
 
 const main = async () => {
