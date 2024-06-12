@@ -51,7 +51,9 @@ const conectarSocket = async () => {
   });
   socket.on('recibir-mensajes', mostrarMensajes);
   socket.on('usuarios-activos', mostrarUsuarios);
-  socket.on('mensaje-privado', () => {});
+  socket.on('mensaje-privado', payload => {
+    console.log(payload);
+  });
 
   // Solo registrar el evento `keyup` cuando `socket` esté listo
   txtMensaje.addEventListener('keyup', ({ keyCode }) => {
