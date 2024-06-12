@@ -18,6 +18,9 @@ const socketController = async (socket = new Socket(), io) => {
   // Mostrar mensajes ya emitidos cuando alguien se conecte
   socket.emit('recibir-mensajes', chatMensajes.ultimosDiezMensajes);
 
+  // Conectar a sala privada
+  socket.join(usuario.id);
+
   // Limpiar usuario cuando se desconecta
   socket.on('disconnect', () => {
     chatMensajes.desconectarUsuario(usuario.id);
@@ -26,8 +29,12 @@ const socketController = async (socket = new Socket(), io) => {
 
   // Escuchar mensajes
   socket.on('enviar-mensaje', ({ mensaje, uid }) => {
-    chatMensajes.enviarMensaje(usuario.id, usuario.nombre, mensaje);
-    io.emit('recibir-mensajes', chatMensajes.ultimosDiezMensajes);
+    if (uid) {
+      socket.to(uid).emit('mensaje-privado', { de: usuario.nombre, mensaje });
+    } else {
+      chatMensajes.enviarMensaje(usuario.id, usuario.nombre, mensaje);
+      io.emit('recibir-mensajes', chatMensajes.ultimosDiezMensajes);
+    }
   });
 };
 
